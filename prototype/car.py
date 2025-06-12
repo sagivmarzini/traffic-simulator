@@ -17,11 +17,11 @@ class Car:
         self.wheel_base: float = 50
 
         # === PHYSICS PROPERTIES ===
-        self.max_speed = 3000  # pixels per second
+        self.max_speed = 5000  # pixels per second
         self.acceleration_rate = 2000  # how fast we accelerate
-        self.deceleration_rate = 500  # how fast we slow down
+        self.deceleration_rate = 1000  # how fast we slow down
         self.drag_coefficient = (
-            0.95  # how much speed we lose each frame (0.95 = lose 5%)
+            0.97  # how much speed we lose each frame (0.95 = lose 5%)
         )
 
         self.__max_steer_angle = radians(15)  # Convert to radians for consistency
@@ -91,9 +91,15 @@ class Car:
             )  # Reverse is slower
 
         # === STEERING ===
+        dynamic_steer = self._get_dynamic_steer_angle()
         if keys[pygame.K_d]:
-            self.steer_angle = self.__max_steer_angle
+            self.steer_angle = dynamic_steer
         elif keys[pygame.K_a]:
-            self.steer_angle = -self.__max_steer_angle
+            self.steer_angle = -dynamic_steer
         else:
             self.steer_angle = 0
+
+    def _get_dynamic_steer_angle(self) -> float:
+        # At 0 speed = full steer. At max_speed = half or less.
+        speed_factor = max(0.3, 1 - (abs(self.car_speed) / self.max_speed))
+        return self.__max_steer_angle * speed_factor
