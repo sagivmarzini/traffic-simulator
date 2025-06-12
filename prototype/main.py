@@ -1,5 +1,7 @@
 import pygame
 import sys
+from car import Car
+from math import pi
 
 # INIT
 pygame.init()
@@ -10,14 +12,20 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Goofy Ahh Pygame Driving")
 clock = pygame.time.Clock()
 
+
 # GAME STATE SETUP
 def load_assets():
     # put your image/sound loads here
     pass
 
+
 def init():
     # init game objects, vars, etc.
+    global car
+    car = Car(pygame.Vector2(0, HEIGHT / 2), 0)
+
     pass
+
 
 def handle_input():
     keys = pygame.key.get_pressed()
@@ -25,18 +33,22 @@ def handle_input():
     # if keys[pygame.K_w]: player.move_up()
     return keys
 
+
 def update(dt: float, keys):
-    # update all your shit here
+    car.handle_input(keys, dt)
+    car.update(dt)
+
     pass
+
 
 def draw():
     screen.fill((20, 20, 20))  # dark background
 
-    rect = pygame.Rect(WIDTH/4, HEIGHT/4, WIDTH/2, HEIGHT/2)
-    pygame.draw.rect(screen, (200, 0, 0), rect)
+    car.draw(screen)
 
     # screen.blit(...), draw sprites, UI, etc.
     pygame.display.flip()
+
 
 # MAIN LOOP
 def main():
@@ -56,6 +68,7 @@ def main():
 
     pygame.quit()
     sys.exit()
+
 
 if __name__ == "__main__":
     main()
