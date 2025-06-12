@@ -30,7 +30,7 @@ class Car:
 
         self.is_braking = False
 
-    def update(self, dt: float):
+    def update(self, dt: float, window_size: Vector2):
         # === STEP 1: Handle acceleration/deceleration ===
 
         # Apply drag (speed naturally decreases over time)
@@ -61,6 +61,8 @@ class Car:
             self.car_heading = atan2(
                 front_wheel.y - back_wheel.y, front_wheel.x - back_wheel.x
             )
+
+            # self._wrap_car_position(window_size)
 
     def _face_wheels_to_car_heading(self) -> tuple[Vector2, Vector2]:
         forward_direction = Vector2(cos(self.car_heading), sin(self.car_heading))
@@ -134,7 +136,23 @@ class Car:
         else:
             self.is_braking = False
 
+    def steer(self, steer_input: float):
+        # Cap the input between -1 and 1
+        steer_input = max(-1, min(steer_input, 1))
+
+        self.steer_angle = steer_input * self.__max_steer_angle
+
     def _get_dynamic_steer_angle(self) -> float:
         # At 0 speed = full steer. At max_speed = half or less.
         speed_factor = max(0.3, 1 - (abs(self.car_speed) * 2 / self.max_speed))
         return self.__max_steer_angle * speed_factor
+
+    def _wrap_car_position(self, window_size: Vector2):
+        if self.position.x > window_size.x:
+            self.position.x -= window_size.x
+        if self.position.x < 0:
+            self.position.x += window_size.x
+        if self.position.y > window_size.y:
+            self.position.y -= window_size.y
+        if self.position.y < 0:
+            self.position.y += window_size.y
