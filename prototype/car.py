@@ -8,26 +8,31 @@ class Car:
         self,
         position: Vector2,
         car_heading: float,
+        car_sprite: pygame.Surface | None = None,
+        car_braking_sprite: pygame.Surface | None = None,
     ):
         self.position = position
         self.car_heading = car_heading
+        self.car_sprite = car_sprite
+        self.car_braking_sprite = car_braking_sprite
 
         self.car_speed: float = 0
         self.steer_angle: float = 0
-        self.wheel_base: float = 50
+        self.wheel_base: float = 100
 
         # === PHYSICS PROPERTIES ===
         self.max_speed = 5000  # pixels per second
         self.acceleration_rate = 2000  # how fast we accelerate
         self.deceleration_rate = 1000  # how fast we slow down
-        self.drag_coefficient = (
-            0.97  # how much speed we lose each frame (0.95 = lose 5%)
-        )
+        self.drag_coefficient = 0.96  # how much speed we lose each frame
 
-        self.__max_steer_angle = radians(15)  # Convert to radians for consistency
+        self.__max_steer_angle = radians(40)
+
+        self.is_braking = False
 
     def update(self, dt: float):
         # === STEP 1: Handle acceleration/deceleration ===
+
         # Apply drag (speed naturally decreases over time)
         self.car_speed *= self.drag_coefficient
 
@@ -68,27 +73,36 @@ class Car:
     def draw(self, surface: pygame.Surface):
         car_length = self.wheel_base * 1.2
         car_width = self.wheel_base / 2
+        if self.car_sprite is None:
+            car_surf = pygame.Surface((car_length, car_width), pygame.SRCALPHA)
+            car_surf.fill((255, 0, 50))
 
-        car_surf = pygame.Surface((car_length, car_width), pygame.SRCALPHA)
-        car_surf.fill((255, 0, 50))
+            rotated = pygame.transform.rotate(car_surf, -degrees(self.car_heading))
+            rect = rotated.get_rect(center=self.position)
+            surface.blit(rotated, rect.topleft)
+        else:
+            if self.car_braking_sprite:
+                sprite = self.car_braking_sprite if self.is_braking else self.car_sprite
+            else:
+                sprite = self.car_sprite
 
-        rotated = pygame.transform.rotate(car_surf, -degrees(self.car_heading))
-        rect = rotated.get_rect(center=self.position)
-        surface.blit(rotated, rect.topleft)
+            # Scale sprite to have a width of car_length, maintaining aspect ratio
+            sprite_width, sprite_height = sprite.get_size()
+            aspect_ratio = sprite_height / sprite_width
+            scaled_height = int(car_length * aspect_ratio)
+
+            sprite = pygame.transform.scale(sprite, (int(car_length), scaled_height))
+            rotated = pygame.transform.rotate(sprite, -degrees(self.car_heading))
+            rect = rotated.get_rect(center=self.position)
+            surface.blit(rotated, rect.topleft)
 
     def handle_input(self, keys, dt: float):
         # === ACCELERATION/DECELERATION ===
         if keys[pygame.K_w]:
-            # Accelerate forward
-            self.car_speed += self.acceleration_rate * dt
-            self.car_speed = min(self.car_speed, self.max_speed)  # Cap max speed
+            self.accelerate(dt)
 
         elif keys[pygame.K_s]:
-            # Decelerate or reverse
-            self.car_speed -= self.deceleration_rate * dt
-            self.car_speed = max(
-                self.car_speed, -self.max_speed / 2
-            )  # Reverse is slower
+            self.decelerate(dt)
 
         # === STEERING ===
         dynamic_steer = self._get_dynamic_steer_angle()
@@ -99,7 +113,28 @@ class Car:
         else:
             self.steer_angle = 0
 
+    def accelerate(self, dt: float):
+        """Simulates pressing the gas pedal"""
+        self.car_speed += self.acceleration_rate * dt
+        self.car_speed = min(self.car_speed, self.max_speed)  # Cap max speed
+
+        # Activate the brake light as long as we're reducing speed
+        if self.car_speed < 0:
+            self.is_braking = True
+        else:
+            self.is_braking = False
+
+    def decelerate(self, dt: float):
+        """Simulates pressing the brake pedal"""
+        # Decelerate or reverse
+        self.car_speed -= self.deceleration_rate * dt
+        self.car_speed = max(self.car_speed, -self.max_speed / 2)  # Reverse is slower
+        if self.car_speed > 0:
+            self.is_braking = True
+        else:
+            self.is_braking = False
+
     def _get_dynamic_steer_angle(self) -> float:
         # At 0 speed = full steer. At max_speed = half or less.
-        speed_factor = max(0.3, 1 - (abs(self.car_speed) / self.max_speed))
+        speed_factor = max(0.3, 1 - (abs(self.car_speed) * 2 / self.max_speed))
         return self.__max_steer_angle * speed_factor

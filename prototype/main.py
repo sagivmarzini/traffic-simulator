@@ -16,13 +16,17 @@ clock = pygame.time.Clock()
 # GAME STATE SETUP
 def load_assets():
     # put your image/sound loads here
+    global car_image
+    car_image = pygame.image.load("./assets/car1.png").convert_alpha()
+    global car_brake_image
+    car_brake_image = pygame.image.load("./assets/car1-brake.png").convert_alpha()
     pass
 
 
 def init():
     # init game objects, vars, etc.
     global car
-    car = Car(pygame.Vector2(0, HEIGHT / 2), 0)
+    car = Car(pygame.Vector2(0, HEIGHT / 2), 0, car_image, car_brake_image)
 
     pass
 
