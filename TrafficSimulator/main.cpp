@@ -5,6 +5,7 @@
 #include "Segment.h"
 #include "Graph.h"
 #include "Controls.h"
+#include "Random.h"
 
 constexpr auto WIDTH = 1080;
 constexpr auto HEIGHT = 720;
@@ -27,20 +28,16 @@ int main()
 	sf::Font font = loadFont("heebo.ttf");
 
 	std::vector<sf::Vector2f> points{
-		sf::Vector2f(200, 200),
-		sf::Vector2f(500, 200),
-		sf::Vector2f(400, 400),
-		sf::Vector2f(100, 300),
+		sf::Vector2f(WIDTH / 4, HEIGHT / 4),
+		sf::Vector2f(3 * WIDTH / 4, HEIGHT / 4),
+		sf::Vector2f(WIDTH / 4, 3 * HEIGHT / 4),
+		sf::Vector2f(3 * WIDTH / 4, 3 * HEIGHT / 4),
 	};
-	std::vector<Segment> segments{
-		Segment(points[0], points[1]),
-		Segment(points[2], points[3]),
-		Segment(points[1], points[3]),
-	};
-	Graph graph(points, segments);
+	Graph graph(points);
 
 	Controls controls({ 0, HEIGHT - 100 }, WIDTH, 100);
-	controls.addButton("Test!", []() {std::cout << "Test button clicked!\n";}, font);
+	controls.addButton("Random\nPoint", [&graph]() {graph.addRandomPoint({ 0,0 }, { WIDTH, HEIGHT });}, font);
+	controls.addButton("Random\nSegment", [&graph]() {graph.addRandomSegment();}, font);
 
 	while (renderer.isOpen())
 	{
