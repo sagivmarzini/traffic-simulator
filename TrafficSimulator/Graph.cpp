@@ -65,6 +65,11 @@ void Graph::draw(Renderer& renderer) const
 	}
 }
 
+std::vector<sf::Vector2f>& Graph::getPoints()
+{
+	return _points;
+}
+
 bool Graph::pointExists(const sf::Vector2f& point) const
 {
 	return std::ranges::any_of(_points, [&point](const auto& p) { return p == point; });

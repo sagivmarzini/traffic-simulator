@@ -62,6 +62,7 @@ int main()
 
 		// DRAW
 		graph.draw(renderer);
+		graphEditor.draw(renderer);
 		controls.draw(renderer);
 
 		renderer.display();

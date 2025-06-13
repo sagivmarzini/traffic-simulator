@@ -20,7 +20,9 @@ public:
 
 	void draw(Renderer& renderer) const;
 
+	std::vector<sf::Vector2f>& getPoints();
 private:
+	// TODO: Encapsulate point with dedicated class
 	std::vector<sf::Vector2f> _points;
 	std::vector<Segment> _segments;
 
