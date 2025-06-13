@@ -138,6 +138,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="GraphEditor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Controls.h" />
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="GraphEditor.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Segment.h" />

@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "Segment.h"
 #include "Graph.h"
+#include "GraphEditor.h"
 #include "Controls.h"
 #include "Random.h"
 
@@ -34,18 +35,32 @@ int main()
 		sf::Vector2f(3 * WIDTH / 4, 3 * HEIGHT / 4),
 	};
 	Graph graph(points);
+	GraphEditor graphEditor(graph, renderer.getWindow());
 
 	Controls controls({ 0, HEIGHT - 100 }, WIDTH, 100);
-	controls.addButton("Random\nPoint", [&graph]() {graph.addRandomPoint({ 0,0 }, { WIDTH, HEIGHT });}, font);
-	controls.addButton("Random\nSegment", [&graph]() {graph.addRandomSegment();}, font);
 
 	while (renderer.isOpen())
 	{
-		renderer.processEvents();
+		while (auto event = renderer.getWindow().pollEvent())
+		{
+			if (event->is<sf::Event::Closed>())
+				renderer.getWindow().close();
+
+			try
+			{
+				graphEditor.handleEvent(*event);
+			}
+			catch (const std::exception& e)
+			{
+				std::cerr << "Error editing graph: " << e.what() << '\n';
+			}
+		}
+
 		renderer.clear(sf::Color(20, 20, 20));
 
-		controls.update(renderer.getWindow());
+		// UPDATE
 
+		// DRAW
 		graph.draw(renderer);
 		controls.draw(renderer);
 

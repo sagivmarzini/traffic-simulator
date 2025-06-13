@@ -11,7 +11,8 @@ public:
 
 	void addButton(const std::string& text, const std::function<void()>& onClick, const sf::Font& font);
 	void draw(Renderer& renderer) const;
-	void update(const sf::RenderWindow& window);
+
+	void handleEvent(const sf::RenderWindow& window, const sf::Event& event);
 private:
 	sf::Vector2f _position; // Top left corner position
 	float _width;

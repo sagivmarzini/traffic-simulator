@@ -26,7 +26,7 @@ bool Button::isHovered(const sf::RenderWindow& window) const
 	return _rect.getGlobalBounds().contains(mousePos);
 }
 
-void Button::update(const sf::RenderWindow& window)
+void Button::handleEvent(const sf::RenderWindow& window)
 {
 	bool hovered = isHovered(window);
 	_rect.setFillColor(hovered ? sf::Color::Transparent : sf::Color::Blue);

@@ -20,10 +20,10 @@ void Controls::draw(Renderer& renderer) const
 	}
 }
 
-void Controls::update(const sf::RenderWindow& window)
+void Controls::handleEvent(const sf::RenderWindow& window, const sf::Event& event)
 {
 	for (auto& button : _buttons)
 	{
-		button.update(window);
+		button.handleEvent(window);
 	}
 }

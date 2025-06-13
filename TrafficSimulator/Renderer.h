@@ -13,8 +13,6 @@ public:
 	void drawRectangle(sf::Vector2f topLeft, float width, float height, float borderThickness, sf::Color color);
 	void drawLine(sf::Vector2f a, sf::Vector2f b, float thickness, sf::Color color = sf::Color::White);
 
-	void processEvents();
-
 	bool isOpen() const;
 	int getWindowWidth() const;
 	int getWindowHeight() const;

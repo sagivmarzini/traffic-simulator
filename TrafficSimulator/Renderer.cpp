@@ -46,23 +46,6 @@ void Renderer::drawLine(sf::Vector2f a, sf::Vector2f b, float thickness, sf::Col
 	_window.draw(line);
 }
 
-void Renderer::processEvents()
-{
-	const std::optional event = _window.pollEvent();
-
-	if (!event.has_value()) return;
-
-	if (event->is<sf::Event::Closed>())
-	{
-		_window.close();
-	}
-	else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
-	{
-		if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
-			_window.close();
-	}
-}
-
 bool Renderer::isOpen() const
 {
 	return _window.isOpen();
