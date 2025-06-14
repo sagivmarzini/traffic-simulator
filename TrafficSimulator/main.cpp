@@ -34,7 +34,12 @@ int main()
 		Point(WIDTH / 4, 3 * HEIGHT / 4),
 		Point(3 * WIDTH / 4, 3 * HEIGHT / 4),
 	};
-	Graph graph(points);
+	std::vector<Segment> segments{
+		Segment(points[0], points[1]),
+		Segment(points[1], points[2]),
+		Segment(points[2], points[3])
+	};
+	Graph graph(points, segments);
 	GraphEditor graphEditor(graph, renderer.getWindow());
 
 	Controls controls({ 0, HEIGHT - 100 }, WIDTH, 100);

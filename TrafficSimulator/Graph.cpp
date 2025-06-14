@@ -22,6 +22,15 @@ void Graph::removePoint(int index)
 	if (index < 0 || index >= _points.size())
 		throw std::out_of_range("Index is out of range");
 
+	const auto& point = _points[index];
+	for (auto it = _segments.begin(); it != _segments.end();)
+	{
+		if (it->contains(point))
+			it = _segments.erase(it);
+		else
+			++it;
+	}
+
 	_points.erase(_points.begin() + index);
 }
 
