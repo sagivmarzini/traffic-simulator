@@ -18,6 +18,11 @@ private:
 	Graph& _graph;
 	sf::RenderWindow& _window;
 	std::optional<size_t> _selectedPointIndex;
+	std::optional<size_t> _hoveredPointIndex;
 
 	Point* getSelectedPoint() const;
+	Point* getHoveredPoint() const;
+
+	void handleMouseMoved(const sf::Event::MouseMoved& event);
+	void handleMouseClicked(const sf::Event::MouseButtonPressed& event);
 };

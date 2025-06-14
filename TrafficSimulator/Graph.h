@@ -22,8 +22,8 @@ public:
 	void draw(Renderer& renderer) const;
 
 	std::vector<Point>& getPoints();
+	std::optional<size_t> getClosestPointIndex(const sf::Vector2f& position) const;
 private:
-	// TODO: Encapsulate point with dedicated class
 	std::vector<Point> _points;
 	std::vector<Segment> _segments;
 

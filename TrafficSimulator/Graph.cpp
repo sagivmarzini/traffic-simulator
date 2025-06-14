@@ -2,6 +2,7 @@
 #include "Random.h"
 
 #include <exception>
+#include <limits>
 
 Graph::Graph(const std::vector<Point>& points, const std::vector<Segment>& segments)
 	: _points(points), _segments(segments)
@@ -68,6 +69,27 @@ void Graph::draw(Renderer& renderer) const
 std::vector<Point>& Graph::getPoints()
 {
 	return _points;
+}
+
+std::optional<size_t> Graph::getClosestPointIndex(const sf::Vector2f& position) const
+{
+	if (_points.empty()) return std::nullopt;
+
+	float minDistance = std::numeric_limits<float>::max();
+	float currentDistance = 0;
+	std::optional<size_t> bestIndex;
+
+	for (size_t i = 0; i < _points.size(); i++)
+	{
+		currentDistance = (_points[i] - position).lengthSquared();
+		if (currentDistance < minDistance)
+		{
+			minDistance = currentDistance;
+			bestIndex = i;
+		}
+	}
+
+	return bestIndex;
 }
 
 bool Graph::pointExists(const Point& point) const
