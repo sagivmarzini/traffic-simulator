@@ -17,6 +17,14 @@ void Graph::addPoint(const Point& point)
 	_points.push_back(point);
 }
 
+void Graph::removePoint(int index)
+{
+	if (index < 0 || index >= _points.size())
+		throw std::out_of_range("Index is out of range");
+
+	_points.erase(_points.begin() + index);
+}
+
 void Graph::addSegment(const Segment& segment)
 {
 	if (segmentExists(segment))

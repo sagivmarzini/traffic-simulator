@@ -78,4 +78,22 @@ void GraphEditor::handleMouseClicked(const sf::Event::MouseButtonPressed& event)
 		_graph.addPoint(mousePosition);
 		_selectedPointIndex = _graph.getPoints().size() - 1;
 	}
+	else if (event.button == sf::Mouse::Button::Right)
+	{
+		if (_hoveredPointIndex)
+		{
+			const size_t removedIndex = *_hoveredPointIndex;
+
+			_graph.removePoint(removedIndex);
+
+			// Invalidate if selected point was deleted
+			if (_selectedPointIndex && *_selectedPointIndex == removedIndex)
+				_selectedPointIndex = std::nullopt;
+			else if (_selectedPointIndex && *_selectedPointIndex > removedIndex)
+				--*_selectedPointIndex; // Shift index left
+
+			// Same logic for hover
+			_hoveredPointIndex = std::nullopt;
+		}
+	}
 }

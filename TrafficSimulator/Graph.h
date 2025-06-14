@@ -14,6 +14,8 @@ public:
 
 	// Throws exception if point already exists
 	void addPoint(const Point& point);
+	void removePoint(int index);
+
 	// Throws exception if segment already exists
 	void addSegment(const Segment& segment);
 	void addRandomPoint(const sf::Vector2f& from, const sf::Vector2f& to);
