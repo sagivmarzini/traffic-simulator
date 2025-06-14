@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Graph.h"
+#include "Point.h"
 
 class GraphEditor
 {
@@ -18,5 +19,5 @@ private:
 	sf::RenderWindow& _window;
 	std::optional<size_t> _selectedPointIndex;
 
-	sf::Vector2f* getSelectedPoint() const;
+	Point* getSelectedPoint() const;
 };

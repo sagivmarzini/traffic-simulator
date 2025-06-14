@@ -10,7 +10,7 @@ void GraphEditor::handleEvent(const sf::Event& event)
 	if (event.is<sf::Event::MouseButtonPressed>())
 	{
 		auto& mouseButton = *event.getIf<sf::Event::MouseButtonPressed>();
-		sf::Vector2f mousePosition = _window.mapPixelToCoords({ mouseButton.position.x, mouseButton.position.y });
+		Point mousePosition = _window.mapPixelToCoords({ mouseButton.position.x, mouseButton.position.y });
 
 		if (mouseButton.button == sf::Mouse::Button::Left)
 		{
@@ -24,10 +24,10 @@ void GraphEditor::draw(Renderer& renderer) const
 {
 	auto selectedPoint = getSelectedPoint();
 	if (selectedPoint)
-		renderer.drawCircle(*selectedPoint, (int)Renderer::Default::PointRadius, 0, sf::Color::Red);
+		selectedPoint->drawWithOutline(renderer, 4, sf::Color::Red);
 }
 
-sf::Vector2f* GraphEditor::getSelectedPoint() const
+Point* GraphEditor::getSelectedPoint() const
 {
 	auto& points = _graph.getPoints();
 

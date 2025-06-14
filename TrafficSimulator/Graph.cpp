@@ -3,12 +3,12 @@
 
 #include <exception>
 
-Graph::Graph(const std::vector<sf::Vector2f>& points, const std::vector<Segment>& segments)
+Graph::Graph(const std::vector<Point>& points, const std::vector<Segment>& segments)
 	: _points(points), _segments(segments)
 {
 }
 
-void Graph::addPoint(const sf::Vector2f& point)
+void Graph::addPoint(const Point& point)
 {
 	if (pointExists(point))
 		throw std::invalid_argument("Point already exists on this graph");
@@ -61,16 +61,16 @@ void Graph::draw(Renderer& renderer) const
 
 	for (const auto& point : _points)
 	{
-		renderer.drawCircle(point, (int)Renderer::Default::PointRadius, 0, sf::Color::White);
+		point.draw(renderer);
 	}
 }
 
-std::vector<sf::Vector2f>& Graph::getPoints()
+std::vector<Point>& Graph::getPoints()
 {
 	return _points;
 }
 
-bool Graph::pointExists(const sf::Vector2f& point) const
+bool Graph::pointExists(const Point& point) const
 {
 	return std::ranges::any_of(_points, [&point](const auto& p) { return p == point; });
 }

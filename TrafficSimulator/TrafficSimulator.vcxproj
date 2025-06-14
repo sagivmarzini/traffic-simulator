@@ -140,6 +140,7 @@
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="GraphEditor.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Segment.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Controls.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphEditor.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Segment.h" />

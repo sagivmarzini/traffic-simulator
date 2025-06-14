@@ -6,18 +6,18 @@ Renderer::Renderer(const sf::VideoMode& videoMode, const std::string& windowName
 	_window.setFramerateLimit(maxFrameRate);
 }
 
-void Renderer::drawCircle(sf::Vector2f center, float radius, float borderThickness = 0, sf::Color color = sf::Color::White)
+void Renderer::drawCircle(sf::Vector2f center, float radius, float outlineThickness, sf::Color color, sf::Color outlineColor)
 {
 	sf::CircleShape circle(radius);
 	circle.setOrigin({ radius, radius });
 	circle.setPosition({ center.x, center.y });
-	circle.setOutlineColor(sf::Color::White);
-	circle.setOutlineThickness(borderThickness);
+	circle.setOutlineColor(outlineColor);
+	circle.setOutlineThickness(outlineThickness);
 	circle.setFillColor(color);
 	_window.draw(circle);
 }
 
-void Renderer::drawRectangle(sf::Vector2f topLeft, float width, float height, float borderThickness = 0, sf::Color color = sf::Color::White)
+void Renderer::drawRectangle(sf::Vector2f topLeft, float width, float height, float borderThickness, sf::Color color)
 {
 	sf::RectangleShape shape({ width - 2 * borderThickness, height - 2 * borderThickness });
 	shape.setPosition({ topLeft.x + borderThickness, topLeft.y + borderThickness });

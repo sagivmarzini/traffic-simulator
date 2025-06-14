@@ -28,11 +28,11 @@ int main()
 	Renderer renderer(sf::VideoMode{ {WIDTH, HEIGHT } }, "Traffic Simulator");
 	sf::Font font = loadFont("heebo.ttf");
 
-	std::vector<sf::Vector2f> points{
-		sf::Vector2f(WIDTH / 4, HEIGHT / 4),
-		sf::Vector2f(3 * WIDTH / 4, HEIGHT / 4),
-		sf::Vector2f(WIDTH / 4, 3 * HEIGHT / 4),
-		sf::Vector2f(3 * WIDTH / 4, 3 * HEIGHT / 4),
+	std::vector<Point> points{
+		Point(WIDTH / 4, HEIGHT / 4),
+		Point(3 * WIDTH / 4, HEIGHT / 4),
+		Point(WIDTH / 4, 3 * HEIGHT / 4),
+		Point(3 * WIDTH / 4, 3 * HEIGHT / 4),
 	};
 	Graph graph(points);
 	GraphEditor graphEditor(graph, renderer.getWindow());
