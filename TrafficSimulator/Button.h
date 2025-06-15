@@ -9,10 +9,10 @@ public:
 	Button(const sf::Vector2f& position, const sf::Vector2f& size, const std::string& text, const sf::Font& font, const std::function<void()>& onClick);
 
 	void setCallback(const std::function<void()>& onClick);
-	void handleEvent(const sf::RenderWindow& window);
+	bool handleEvent(const sf::Event& event);
 	void draw(sf::RenderWindow& window) const;
 
-	bool isHovered(const sf::RenderWindow& window) const;
+	bool isHovered(const sf::Event& event) const;
 
 private:
 	sf::RectangleShape _rect;

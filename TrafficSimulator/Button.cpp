@@ -20,27 +20,64 @@ void Button::setCallback(const std::function<void()>& onClick)
 	_onClick = onClick;
 }
 
-bool Button::isHovered(const sf::RenderWindow& window) const
+bool Button::isHovered(const sf::Event& event) const
 {
-	sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+	auto mouseMoved = event.getIf<sf::Event::MouseMoved>();
+	auto mouseButtonPressed = event.getIf<sf::Event::MouseButtonPressed>();
+	sf::Vector2f mousePos;
+
+	if (mouseMoved)
+	{
+		mousePos = static_cast<sf::Vector2f>(mouseMoved->position);
+		return _rect.getGlobalBounds().contains(mousePos);
+	}
+	else if (mouseButtonPressed)
+	{
+		mousePos = static_cast<sf::Vector2f>(mouseButtonPressed->position);
+	}
+
 	return _rect.getGlobalBounds().contains(mousePos);
 }
 
-void Button::handleEvent(const sf::RenderWindow& window)
+bool Button::handleEvent(const sf::Event& event)
 {
-	bool hovered = isHovered(window);
-	_rect.setFillColor(hovered ? sf::Color::Transparent : sf::Color::Blue);
-
-	bool pressed = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
-	if (hovered && pressed && !_wasPressed && _onClick)
+	// Handle mouse movement for hover state
+	if (event.is<sf::Event::MouseMoved>())
 	{
-		_onClick();
+		bool hovered = isHovered(event);
+		_rect.setFillColor(hovered ? sf::Color::Transparent : sf::Color::Blue);
 	}
-	_wasPressed = pressed;
+
+	// Handle mouse button press
+	if (event.is<sf::Event::MouseButtonPressed>())
+	{
+		const auto& mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
+		if ((*mouseEvent).button == sf::Mouse::Button::Left)
+		{
+			bool hovered = isHovered(event);
+			if (hovered && _onClick)
+			{
+				_onClick();
+				return true; // Button consumed the click event
+			}
+		}
+	}
+
+	return false; // Button didn't consume the event
 }
 
 void Button::draw(sf::RenderWindow& window) const
 {
+	// Save the current view
+	sf::View currentView = window.getView();
+
+	// Switch to default view for UI rendering (fixed to screen)
+	window.setView(window.getDefaultView());
+
+	// Draw the UI elements
 	window.draw(_rect);
 	window.draw(_text);
+
+	// Restore the previous view
+	window.setView(currentView);
 }

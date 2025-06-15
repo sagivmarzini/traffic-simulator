@@ -43,6 +43,7 @@ int main()
 	GraphEditor graphEditor(graph, renderer.getWindow());
 
 	Controls controls({ 0, HEIGHT - 100 }, WIDTH, 100);
+	controls.addButton("Clear", [&graph]() {graph.clear();}, font);
 
 	while (renderer.isOpen())
 	{
@@ -53,7 +54,8 @@ int main()
 
 			try
 			{
-				graphEditor.handleEvent(*event);
+				if (!controls.handleEvent(*event))
+					graphEditor.handleEvent(*event);
 			}
 			catch (const std::exception& e)
 			{

@@ -92,6 +92,12 @@ void Graph::addRandomSegment()
 	}
 }
 
+void Graph::clear()
+{
+	_points.clear();
+	_segments.clear();
+}
+
 void Graph::draw(Renderer& renderer) const
 {
 	for (const auto& segment : _segments)

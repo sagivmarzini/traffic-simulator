@@ -73,7 +73,14 @@ void GraphEditor::handleMouseMoved(const sf::Event::MouseMoved& event)
 	// Drag selected point if dragging
 	if (_dragging && _selectedPointIndex)
 	{
-		_graph.movePoint(*_selectedPointIndex, _mousePosition);
+		try
+		{
+			_graph.movePoint(*_selectedPointIndex, _mousePosition);
+		}
+		catch (const std::exception& e)
+		{
+			_selectedPointIndex = std::nullopt;
+		}
 		return;
 	}
 
@@ -145,7 +152,14 @@ void GraphEditor::handleLeftClick(const sf::Event::MouseButtonPressed& event)
 	// Add a segment between selected point and the new one
 	if (_selectedPointIndex)
 	{
-		_graph.addSegment(*_selectedPointIndex, lastPointIndex);
+		try
+		{
+			_graph.addSegment(*_selectedPointIndex, lastPointIndex);
+		}
+		catch (...)
+		{
+			_selectedPointIndex = std::nullopt;
+		}
 	}
 
 	_selectedPointIndex = lastPointIndex;

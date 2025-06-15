@@ -20,10 +20,15 @@ void Controls::draw(Renderer& renderer) const
 	}
 }
 
-void Controls::handleEvent(const sf::RenderWindow& window, const sf::Event& event)
+bool Controls::handleEvent(const sf::Event& event)
 {
+	bool usedEvent = false;
+
 	for (auto& button : _buttons)
 	{
-		button.handleEvent(window);
+		if (button.handleEvent(event))
+			usedEvent = true;
 	}
+
+	return usedEvent;
 }

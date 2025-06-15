@@ -22,6 +22,8 @@ public:
 	void addRandomPoint(const sf::Vector2f& from, const sf::Vector2f& to);
 	void addRandomSegment();
 
+	void clear();
+
 	void draw(Renderer& renderer) const;
 
 	std::vector<Point>& getPoints();
