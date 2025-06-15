@@ -7,12 +7,17 @@ GraphEditor::GraphEditor(Graph& graph, sf::RenderWindow& window)
 
 void GraphEditor::handleEvent(const sf::Event& event)
 {
+	// Mouse events
 	if (event.is<sf::Event::MouseMoved>())
 		handleMouseMoved(*event.getIf<sf::Event::MouseMoved>());
 	else if (event.is<sf::Event::MouseButtonPressed>())
 		handleMouseClicked(*event.getIf<sf::Event::MouseButtonPressed>());
 	else if (event.is<sf::Event::MouseButtonReleased>())
 		handleMouseReleased(*event.getIf<sf::Event::MouseButtonReleased>());
+	else if (event.is<sf::Event::MouseWheelScrolled>())
+		handleMouseScroll(*event.getIf<sf::Event::MouseWheelScrolled>());
+
+	// Keyboard events
 	else if (event.is<sf::Event::KeyPressed>())
 		handleKeyPressed(*event.getIf<sf::Event::KeyPressed>());
 	else if (event.is<sf::Event::KeyReleased>())
@@ -25,13 +30,13 @@ void GraphEditor::draw(Renderer& renderer) const
 	{
 		selectedPoint->drawWithOutline(renderer, 6, sf::Color(255, 0, 0));
 
-		// Draw preview segment
+		// Draw preview segment from selected point to mouse or to hovered point
 		if (_hoveredPointIndex && *_hoveredPointIndex != *_selectedPointIndex && _shiftDown)
 		{
 			const auto& target = _graph.getPoints()[*_hoveredPointIndex];
 			Segment(*selectedPoint, target).draw(renderer, 80);
 		}
-		else if (*selectedPoint != _mousePosition)
+		else if (*selectedPoint != _mousePosition && !_hoveredPointIndex)
 		{
 			Segment(*selectedPoint, _mousePosition).draw(renderer, 50);
 		}
@@ -65,12 +70,14 @@ void GraphEditor::handleMouseMoved(const sf::Event::MouseMoved& event)
 {
 	_mousePosition = _window.mapPixelToCoords({ event.position.x, event.position.y });
 
+	// Drag selected point if dragging
 	if (_dragging && _selectedPointIndex)
 	{
 		_graph.movePoint(*_selectedPointIndex, _mousePosition);
 		return;
 	}
 
+	// Mark a close point as hovered
 	if (const auto closestPointIndex = _graph.getClosestPointIndex(_mousePosition);
 		closestPointIndex &&
 		(_graph.getPoints()[*closestPointIndex] - _mousePosition).length() <= 2 * (int)Renderer::Default::PointRadius)
@@ -81,24 +88,43 @@ void GraphEditor::handleMouseMoved(const sf::Event::MouseMoved& event)
 	{
 		_hoveredPointIndex = std::nullopt;
 	}
+
+	// Pan the view if holding middle mouse
+	if (_panning)
+	{
+		// Calculate delta in screen space
+		sf::Vector2i currentPixel = { event.position.x, event.position.y };
+		sf::Vector2f pixelDelta(_panAnchor - currentPixel);
+
+		sf::View view = _window.getView();
+
+		// Convert pixel delta to world delta based on current zoom level
+		sf::Vector2f worldDelta = pixelDelta * (view.getSize().x / _window.getSize().x);
+
+		view.move(worldDelta);
+		_window.setView(view);
+
+		// Update anchor to current pixel position
+		_panAnchor = currentPixel;
+	}
 }
 
 void GraphEditor::handleMouseClicked(const sf::Event::MouseButtonPressed& event)
 {
 	if (event.button == sf::Mouse::Button::Left)
-	{
 		handleLeftClick(event);
-	}
 	else if (event.button == sf::Mouse::Button::Right)
-	{
 		handleRightClick(event);
-	}
+	else if (event.button == sf::Mouse::Button::Middle)
+		handleMiddleClick(event);
 }
 
 void GraphEditor::handleMouseReleased(const sf::Event::MouseButtonReleased& event)
 {
 	if (event.button == sf::Mouse::Button::Left)
 		_dragging = false;
+	if (event.button == sf::Mouse::Button::Middle)
+		_panning = false;
 }
 
 void GraphEditor::handleLeftClick(const sf::Event::MouseButtonPressed& event)
@@ -146,6 +172,28 @@ void GraphEditor::handleRightClick(const sf::Event::MouseButtonPressed& event)
 	{
 		_selectedPointIndex = std::nullopt;
 	}
+}
+
+void GraphEditor::handleMiddleClick(const sf::Event::MouseButtonPressed& event)
+{
+	_panning = true;
+	_panAnchor = _window.mapCoordsToPixel(_mousePosition);
+}
+
+void GraphEditor::handleMouseScroll(const sf::Event::MouseWheelScrolled& event)
+{
+	// Zoom to the mouse
+	sf::View view = _window.getView();
+
+	sf::Vector2f beforeZoom = _window.mapPixelToCoords({ event.position.x, event.position.y });
+	view.zoom(event.delta > 0 ? 0.9f : 1.1f);
+	_window.setView(view);
+
+	sf::Vector2f afterZoom = _window.mapPixelToCoords({ event.position.x, event.position.y });
+	sf::Vector2f offset = beforeZoom - afterZoom;
+	view.move(offset);
+
+	_window.setView(view);
 }
 
 void GraphEditor::handleKeyPressed(const sf::Event::KeyPressed& event)

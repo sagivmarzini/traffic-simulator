@@ -57,7 +57,7 @@ int main()
 			}
 			catch (const std::exception& e)
 			{
-				std::cerr << "Error editing graph: " << e.what() << '\n';
+				std::cerr << "| GRAPH EDITOR ERROR | " << e.what() << '\n';
 			}
 		}
 
