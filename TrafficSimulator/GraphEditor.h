@@ -19,10 +19,12 @@ private:
 	sf::RenderWindow& _window;
 	std::optional<size_t> _selectedPointIndex;
 	std::optional<size_t> _hoveredPointIndex;
+	bool _dragging = false;
 
 	Point* getSelectedPoint() const;
 	Point* getHoveredPoint() const;
 
 	void handleMouseMoved(const sf::Event::MouseMoved& event);
 	void handleMouseClicked(const sf::Event::MouseButtonPressed& event);
+	void handleMouseReleased(const sf::Event::MouseButtonReleased& event);
 };

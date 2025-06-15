@@ -14,10 +14,11 @@ public:
 
 	// Throws exception if point already exists
 	void addPoint(const Point& point);
-	void removePoint(int index);
+	void removePoint(size_t index);
+	void movePoint(size_t index, const sf::Vector2f& newPosition);
 
 	// Throws exception if segment already exists
-	void addSegment(const Segment& segment);
+	void addSegment(size_t indexPoint1, size_t indexPoint2);
 	void addRandomPoint(const sf::Vector2f& from, const sf::Vector2f& to);
 	void addRandomSegment();
 
@@ -31,4 +32,6 @@ private:
 
 	bool pointExists(const Point& point) const;
 	bool segmentExists(const Segment& segment) const;
+
+	void validatePointIndex(size_t index) const;
 };

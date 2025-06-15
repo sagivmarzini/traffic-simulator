@@ -17,10 +17,9 @@ void Graph::addPoint(const Point& point)
 	_points.push_back(point);
 }
 
-void Graph::removePoint(int index)
+void Graph::removePoint(size_t index)
 {
-	if (index < 0 || index >= _points.size())
-		throw std::out_of_range("Index is out of range");
+	validatePointIndex(index);
 
 	const auto& point = _points[index];
 	for (auto it = _segments.begin(); it != _segments.end();)
@@ -34,8 +33,31 @@ void Graph::removePoint(int index)
 	_points.erase(_points.begin() + index);
 }
 
-void Graph::addSegment(const Segment& segment)
+void Graph::movePoint(size_t index, const sf::Vector2f& newPosition)
 {
+	validatePointIndex(index);
+
+	for (auto& segment : _segments)
+	{
+		if (segment.contains(_points[index]))
+		{
+			if (segment.p1 == _points[index])
+				segment.p1 = newPosition;
+			if (segment.p2 == _points[index])
+				segment.p2 = newPosition;
+		}
+	}
+
+	_points[index] = newPosition;
+}
+
+void Graph::addSegment(size_t indexPoint1, size_t indexPoint2)
+{
+	validatePointIndex(indexPoint1);
+	validatePointIndex(indexPoint2);
+
+	Segment segment(_points[indexPoint1], _points[indexPoint2]);
+
 	if (segmentExists(segment))
 		throw std::invalid_argument("Segment already exists on this graph");
 
@@ -117,4 +139,10 @@ bool Graph::pointExists(const Point& point) const
 bool Graph::segmentExists(const Segment& segment) const
 {
 	return std::ranges::any_of(_segments, [&segment](const auto& s) { return s == segment; });
+}
+
+void Graph::validatePointIndex(size_t index) const
+{
+	if (index < 0 || index >= _points.size())
+		throw std::out_of_range("Index is out of range");
 }
