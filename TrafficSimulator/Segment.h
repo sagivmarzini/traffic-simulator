@@ -12,7 +12,7 @@ struct Segment
 
 	Segment(const Point& p1, const Point& p2);
 
-	void draw(Renderer& renderer) const;
+	void draw(Renderer& renderer, int alpha = 255) const;
 
 	bool operator==(const Segment& other) const;
 	bool contains(const Point& point) const;

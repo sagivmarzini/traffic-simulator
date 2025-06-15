@@ -59,7 +59,7 @@ void Graph::addSegment(size_t indexPoint1, size_t indexPoint2)
 	Segment segment(_points[indexPoint1], _points[indexPoint2]);
 
 	if (segmentExists(segment))
-		throw std::invalid_argument("Segment already exists on this graph");
+		throw std::invalid_argument("This segment already exists on this graph");
 
 	_segments.push_back(segment);
 }
