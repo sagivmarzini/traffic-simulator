@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Graph.h"
-#include "Point.h"
+#include "Node.h"
 
 class GraphEditor
 {
@@ -26,8 +26,8 @@ private:
 	bool _dragging = false;
 	bool _shiftDown = false;
 
-	Point* getSelectedPoint() const;
-	Point* getHoveredPoint() const;
+	Node* getSelectedPoint() const;
+	Node* getHoveredPoint() const;
 
 	void handleMouseMoved(const sf::Event::MouseMoved& event);
 	void handleMouseClicked(const sf::Event::MouseButtonPressed& event);

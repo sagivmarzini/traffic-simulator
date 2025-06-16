@@ -46,7 +46,7 @@ void GraphEditor::draw(Renderer& renderer) const
 		hoveredPoint->drawWithOutline(renderer, 8, sf::Color(255, 0, 0, 100));
 }
 
-Point* GraphEditor::getSelectedPoint() const
+Node* GraphEditor::getSelectedPoint() const
 {
 	auto& points = _graph.getPoints();
 
@@ -56,7 +56,7 @@ Point* GraphEditor::getSelectedPoint() const
 	return nullptr;
 }
 
-Point* GraphEditor::getHoveredPoint() const
+Node* GraphEditor::getHoveredPoint() const
 {
 	auto& points = _graph.getPoints();
 

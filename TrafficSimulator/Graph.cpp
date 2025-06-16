@@ -9,15 +9,15 @@
 
 using json = nlohmann::json;
 
-Graph::Graph(const std::vector<Point>& points, const std::vector<Segment>& segments)
+Graph::Graph(const std::vector<Node>& points, const std::vector<Segment>& segments)
 	: _points(points), _segments(segments)
 {
 }
 
-void Graph::addPoint(const Point& point)
+void Graph::addPoint(const Node& point)
 {
 	if (pointExists(point))
-		throw std::invalid_argument("Point already exists on this graph");
+		throw std::invalid_argument("Node already exists on this graph");
 
 	_points.push_back(point);
 }
@@ -116,7 +116,7 @@ void Graph::draw(Renderer& renderer) const
 	}
 }
 
-std::vector<Point>& Graph::getPoints()
+std::vector<Node>& Graph::getPoints()
 {
 	return _points;
 }
@@ -142,6 +142,11 @@ std::optional<size_t> Graph::getClosestPointIndex(const sf::Vector2f& position) 
 	return bestIndex;
 }
 
+const std::vector<Segment>& Graph::getSegments() const
+{
+	return _segments;
+}
+
 void Graph::saveToFile(const std::string& filename) const
 {
 	json j;
@@ -164,11 +169,11 @@ void Graph::loadFromFile(const std::string& filename)
 	json j;
 	file >> j;
 
-	_points = j.at("points").get<std::vector<Point>>();
+	_points = j.at("points").get<std::vector<Node>>();
 	_segments = j.at("segments").get<std::vector<Segment>>();
 }
 
-bool Graph::pointExists(const Point& point) const
+bool Graph::pointExists(const Node& point) const
 {
 	return std::ranges::any_of(_points, [&point](const auto& p) { return p == point; });
 }

@@ -7,6 +7,7 @@
 #include "GraphEditor.h"
 #include "Controls.h"
 #include "Random.h"
+#include "RoadNetwork.h"
 
 constexpr auto WIDTH = 1080;
 constexpr auto HEIGHT = 720;
@@ -29,11 +30,11 @@ int main()
 	Renderer renderer(sf::VideoMode{ {WIDTH, HEIGHT } }, "Traffic Simulator");
 	sf::Font font = loadFont("heebo.ttf");
 
-	std::vector<Point> points{
-		Point(WIDTH / 4, HEIGHT / 4),
-		Point(3 * WIDTH / 4, HEIGHT / 4),
-		Point(WIDTH / 4, 3 * HEIGHT / 4),
-		Point(3 * WIDTH / 4, 3 * HEIGHT / 4),
+	std::vector<Node> points{
+		Node(WIDTH / 4, HEIGHT / 4),
+		Node(3 * WIDTH / 4, HEIGHT / 4),
+		Node(WIDTH / 4, 3 * HEIGHT / 4),
+		Node(3 * WIDTH / 4, 3 * HEIGHT / 4),
 	};
 	std::vector<Segment> segments{
 		Segment(points[0], points[1]),
@@ -41,6 +42,7 @@ int main()
 		Segment(points[2], points[3])
 	};
 	Graph graph(points, segments);
+	RoadNetwork roads(graph);
 	graph.loadFromFile(saveFilename);
 	GraphEditor graphEditor(graph, renderer.getWindow());
 
@@ -75,10 +77,12 @@ int main()
 		renderer.clear(sf::Color(20, 20, 20));
 
 		// UPDATE
+		roads.setGraph(graph);
 
 		// DRAW
 		graph.draw(renderer);
 		graphEditor.draw(renderer);
+		roads.draw(renderer);
 		controls.draw(renderer);
 
 		renderer.display();

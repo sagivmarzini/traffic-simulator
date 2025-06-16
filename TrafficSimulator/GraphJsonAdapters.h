@@ -1,17 +1,17 @@
 #pragma once
 
 #include "json.hpp"
-#include "Point.h"
+#include "Node.h"
 #include "Segment.h"
 
 using json = nlohmann::json;
 
 // Point to/from JSON
-inline void to_json(json& j, const Point& p) {
+inline void to_json(json& j, const Node& p) {
 	j = json{ {"x", p.x}, {"y", p.y} };
 }
 
-inline void from_json(const json& j, Point& p) {
+inline void from_json(const json& j, Node& p) {
 	p.x = j.at("x").get<float>();
 	p.y = j.at("y").get<float>();
 }
@@ -22,6 +22,6 @@ inline void to_json(json& j, const Segment& s) {
 }
 
 inline void from_json(const json& j, Segment& s) {
-	s.p1 = j.at("p1").get<Point>();
-	s.p2 = j.at("p2").get<Point>();
+	s.p1 = j.at("p1").get<Node>();
+	s.p2 = j.at("p2").get<Node>();
 }

@@ -140,9 +140,11 @@
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="GraphEditor.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RoadNetwork.cpp" />
+    <ClCompile Include="RoadSegment.cpp" />
     <ClCompile Include="Segment.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -153,9 +155,11 @@
     <ClInclude Include="GraphJsonAdapters.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="json_fwd.hpp" />
-    <ClInclude Include="Point.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RoadNetwork.h" />
+    <ClInclude Include="RoadSegment.h" />
     <ClInclude Include="Segment.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

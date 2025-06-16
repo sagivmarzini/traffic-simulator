@@ -1,6 +1,6 @@
 #include "Segment.h"
 
-Segment::Segment(const Point& p1, const Point& p2)
+Segment::Segment(const Node& p1, const Node& p2)
 	: p1(p1), p2(p2)
 {
 	if (p1 == p2)
@@ -17,7 +17,7 @@ bool Segment::operator==(const Segment& other) const
 	return contains(other.p1) && contains(other.p2);
 }
 
-bool Segment::contains(const Point& point) const
+bool Segment::contains(const Node& point) const
 {
 	return p1 == point || p2 == point;
 }
