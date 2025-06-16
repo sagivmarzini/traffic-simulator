@@ -10,6 +10,7 @@
 
 constexpr auto WIDTH = 1080;
 constexpr auto HEIGHT = 720;
+constexpr auto saveFilename = "my-graph.json";
 
 static sf::Font loadFont(const std::string& fontName)
 {
@@ -40,10 +41,18 @@ int main()
 		Segment(points[2], points[3])
 	};
 	Graph graph(points, segments);
+	graph.loadFromFile(saveFilename);
 	GraphEditor graphEditor(graph, renderer.getWindow());
 
 	Controls controls({ 0, HEIGHT - 100 }, WIDTH, 100);
-	controls.addButton("Clear", [&graph]() {graph.clear();}, font);
+	controls.addButton("Clear", [&graph]() {
+		graph.clear();
+		std::cout << "| GRAPH EDITOR | Graph cleared\n";
+		}, font);
+	controls.addButton("Save", [&graph]() {
+		graph.saveToFile(saveFilename);
+		std::cout << "| GRAPH EDITOR | Graph saved as `" << saveFilename << "`\n";
+		}, font);
 
 	while (renderer.isOpen())
 	{

@@ -1,8 +1,13 @@
 #include "Graph.h"
+#include "GraphJsonAdapters.h"
 #include "Random.h"
+#include "json.hpp"
 
 #include <exception>
 #include <limits>
+#include <fstream>
+
+using json = nlohmann::json;
 
 Graph::Graph(const std::vector<Point>& points, const std::vector<Segment>& segments)
 	: _points(points), _segments(segments)
@@ -135,6 +140,32 @@ std::optional<size_t> Graph::getClosestPointIndex(const sf::Vector2f& position) 
 	}
 
 	return bestIndex;
+}
+
+void Graph::saveToFile(const std::string& filename) const
+{
+	json j;
+	j["points"] = _points;
+	j["segments"] = _segments;
+
+	std::ofstream file(filename);
+	if (!file)
+		throw std::runtime_error("Failed to open file for saving.");
+
+	file << j.dump(2); // 2 = pretty print indent
+}
+
+void Graph::loadFromFile(const std::string& filename)
+{
+	std::ifstream file(filename);
+	if (!file)
+		throw std::runtime_error("Failed to open file for loading.");
+
+	json j;
+	file >> j;
+
+	_points = j.at("points").get<std::vector<Point>>();
+	_segments = j.at("segments").get<std::vector<Segment>>();
 }
 
 bool Graph::pointExists(const Point& point) const

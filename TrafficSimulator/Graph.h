@@ -28,6 +28,9 @@ public:
 
 	std::vector<Point>& getPoints();
 	std::optional<size_t> getClosestPointIndex(const sf::Vector2f& position) const;
+
+	void saveToFile(const std::string& filename) const;
+	void loadFromFile(const std::string& filename);
 private:
 	std::vector<Point> _points;
 	std::vector<Segment> _segments;

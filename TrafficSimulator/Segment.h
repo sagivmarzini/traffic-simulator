@@ -10,6 +10,7 @@ struct Segment
 	Point p1;
 	Point p2;
 
+	Segment() = default;
 	Segment(const Point& p1, const Point& p2);
 
 	void draw(Renderer& renderer, int alpha = 255) const;
